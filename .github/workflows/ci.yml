@@ -29,17 +29,13 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Clone test-service (API server)
-        run: |
-          git clone https://github.com/sun6r0/test-service.git
-          cd test-service
-          # Опционально: переключиться на конкретный коммит/ветку
-          # git checkout some-branch-or-tag
+        run: git clone https://github.com/sun6r0/test-service.git
 
       - name: Start API server with Docker Compose
         run: |
           cd test-service
-          docker-compose up -d --build
-          sleep 30   # даём серверу время подняться
+          docker compose up -d --build
+          sleep 30
 
       - name: Run tests
         run: mvn clean test
@@ -48,7 +44,7 @@ jobs:
         if: always()
         run: |
           cd test-service
-          docker-compose down
+          docker compose down
 
       - name: Upload test reports
         if: always()
