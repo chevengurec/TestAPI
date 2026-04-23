@@ -2,9 +2,9 @@ name: API Tests CI
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout test code
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -22,17 +22,24 @@ jobs:
           distribution: 'temurin'
 
       - name: Cache Maven dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Start Docker Compose (API сервер)
+      - name: Clone test-service (API server)
         run: |
-          cd SimAPI/test-service
+          git clone https://github.com/sun6r0/test-service.git
+          cd test-service
+          # Опционально: переключиться на конкретный коммит/ветку
+          # git checkout some-branch-or-tag
+
+      - name: Start API server with Docker Compose
+        run: |
+          cd test-service
           docker-compose up -d --build
-          sleep 30
+          sleep 30   # даём серверу время подняться
 
       - name: Run tests
         run: mvn clean test
@@ -40,7 +47,7 @@ jobs:
       - name: Stop Docker Compose
         if: always()
         run: |
-          cd SimAPI/test-service
+          cd test-service
           docker-compose down
 
       - name: Upload test reports
