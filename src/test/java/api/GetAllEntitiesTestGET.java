@@ -8,7 +8,6 @@ import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
