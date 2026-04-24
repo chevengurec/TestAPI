@@ -1,13 +1,13 @@
 package api;
 
-import dto.Entity;
+import dto.EntityResponse;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 
 import java.util.List;
 
@@ -25,14 +25,14 @@ public class GetAllEntitiesTestGET extends BaseTest {
     @DisplayName("Позитивный тест: получение сущностей")
     void shouldGetAllEntitys() {
 
-        List<Entity> entities = given()
+        List<EntityResponse> entities = given()
                 .spec(spec)
                 .when()
                 .get(config.getAll())
                 .then()
                 .statusCode(200)
                 .extract()
-                .jsonPath().getList("entity", Entity.class);
+                .jsonPath().getList("entity", EntityResponse.class);
 
         assertNotNull(entities);
 

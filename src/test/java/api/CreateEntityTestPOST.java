@@ -1,13 +1,14 @@
 package api;
 
 
-import dto.Entity;
+import dto.EntityRequest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 
 
 import java.util.Arrays;
@@ -27,7 +28,7 @@ public class CreateEntityTestPOST extends BaseTest {
     @Description("Позитивный тест: создание сущности со всеми полями")
     @DisplayName("Позитивный тест: создание сущности со всеми полями")
     void shouldCreateEntity() {
-        Entity.Addition addition = Entity.Addition
+        EntityRequest.Addition addition = EntityRequest.Addition
                 .builder()
                 .additionalInfo("Очень важная добавочная информация!!!111")
                 .additionalNumber(100500)
@@ -35,7 +36,7 @@ public class CreateEntityTestPOST extends BaseTest {
 
         List<Integer> importantNumbers = Arrays.asList(1, 2, 3, 4, 5);
 
-        Entity request = Entity.builder()
+        EntityRequest request = EntityRequest.builder()
                 .title("Тестовая сущность")
                 .verified(true)
                 .addition(addition)

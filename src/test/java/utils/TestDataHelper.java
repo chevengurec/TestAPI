@@ -1,6 +1,6 @@
 package utils;
 
-import dto.Entity;
+import dto.EntityRequest;
 import io.restassured.specification.RequestSpecification;
 
 import java.util.Arrays;
@@ -19,21 +19,24 @@ public class TestDataHelper {
     }
 
     public Long createTestEntity() {
-
-        Entity.Addition addition = Entity.Addition.builder()
+        EntityRequest.Addition addition = EntityRequest.Addition.builder()
                 .additionalInfo("Тестовая информация")
                 .additionalNumber(100)
                 .build();
 
-        List<Integer> importantNumbers = Arrays.asList(1, 2, 3);  // ← добавить
+        List<Integer> importantNumbers = Arrays.asList(1, 2, 3);
 
-        Entity request = Entity.builder()
+        EntityRequest request = EntityRequest.builder()
                 .title("Тестовая сущность")
                 .verified(true)
                 .addition(addition)
-                .importantNumbers(importantNumbers)  // ← добавить
+                .importantNumbers(importantNumbers)
                 .build();
 
+        return createTestEntity(request);
+    }
+
+    public Long createTestEntity(EntityRequest request) {
         String response = given()
                 .spec(spec)
                 .body(request)
@@ -45,33 +48,4 @@ public class TestDataHelper {
 
         return Long.parseLong(response.trim());
     }
-
-    public Long createTestEntity(Entity request) {
-
-        Entity.Addition addition = Entity.Addition.builder()
-                .additionalInfo("Тестовая информация")
-                .additionalNumber(100)
-                .build();
-
-        List<Integer> importantNumbers = Arrays.asList(1, 2, 3);  // ← добавить
-
-        request = Entity.builder()
-                .title("Тестовая сущность")
-                .verified(true)
-                .addition(addition)
-                .importantNumbers(importantNumbers)  // ← добавить
-                .build();
-
-        String response = given()
-                .spec(spec)
-                .body(request)
-                .post(createEndpoint)
-                .then()
-                .statusCode(200)
-                .extract()
-                .asString();
-
-        return Long.parseLong(response.trim());
-    }
-
 }
